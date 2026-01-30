@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DES</title>
+    <link rel="stylesheet" href="/php/assets/css/des_index_style.css">
+    <script type="module" src="/php/assets/js/jszip.min.js"></script>
+    <script type="module" src="/php/assets/js/des_script.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Gerador DES</h1>
+        <form id="uploadForm">
+            <label for="razaoSocial">Razão Social:</label>
+            <input type="text" id="razaoSocial" name="razaoSocial" required>
+
+            <label for="inscricaoMunicipal">Inscrição Municipal:</label>
+            <input type="text" id="inscricaoMunicipal" name="inscricaoMunicipal" required>
+
+            <label for="codigoServico">Código do Serviço (CTISS):</label>
+            <select name="codigoServico" id="codigoServico" required>
+                <option value="" selected disabled hidden></option>
+                <option value="060300288">
+                    0603-0/02-88 | SERVIÇOS DE MASSAGEM OU CONGÊNERES.
+                </option>
+                <option value="170600188">
+                    1706-0/01-88 | PROPAGANDA E PUBLICIDADE, INCLUSIVE PROMOCAO DE VENDAS.
+                </option>
+            </select>
+
+            <label for="subItem">Código do Subitem:</label>
+            <select name="subItem" id="subItem" required>
+                <option value="" selected disabled hidden></option>
+                <option value="6.03">
+                    0603-0/02-88 | BANHOS, DUCHAS, SAUNA, MASSAGENS E CONGÊNERES.
+                </option>
+                <option value="17.06">
+                    17.06 | PROPAGANDA E PUBLICIDADE, INCLUSIVE PROMOCAO DE VENDAS.
+                </option>
+            </select>
+
+            <label for="regimeTributacao">Regime de Tributação:</label>
+            <select name="regimeTributacao" id="regimeTributacao" required>
+                <option value="" selected disabled hidden></option>
+                <option value="1">
+                    3.1 | REGRA GERAL
+                </option>
+                <option value="9">
+                    9 | ME OU EPP OPTANTE PELO SIMPLES NACIONAL
+                </option>
+            </select>
+
+            <label for="fileUpload">Arquivos XML:</label>
+            <input type="file" id="fileUpload" accept=".xml" multiple required>
+
+            <button id="submitButton" type="submit">GERAR</button>
+            <img 
+                src="/php/assets/icons/note.svg" 
+                alt="Note" 
+                width="50" 
+                height="50" 
+                class="wiggle hidden"
+                id="noteIcon"
+            >
+        </form>
+        <div id="errorBox" class="error-box hidden">
+            <span class="error-text" id="errorText"></span>
+        </div>
+    </div>
+</body>
+</html>

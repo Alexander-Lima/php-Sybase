@@ -2,20 +2,31 @@
 
 use Slim\App;
 use Controller\Controllers\AcumuladorController;
+use Controller\Controllers\DesController;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 return function(App $app) {
     $app->get("/php/acumuladores", [AcumuladorController::class, 'index']);
-
     $app->post("/php/acumuladores/comparar", [AcumuladorController::class, 'compare']);
 
+    $app->get("/php/des", [DesController::class, 'index']);
+    $app->post("/php/des", [DesController::class, 'generate']);
+
     // $app->get("/php/teste", function(Request $request, Response $response, array $args){
-    //     $response->getBody()->write(json_encode($_SERVER));
+    //     // $cn = explode(",", $_SERVER['SSL_CLIENT_SUBJECT']);
+    //     // $name = explode(":", $cn[0]);
+    //     // $razao = str_replace("CN=", "", $name[0]);
+    //     // $cnpj = $name[1];
 
-    //     return toJson($response);
-    // });
+    //     // if($cnpj === "10534874000182") {
+    //     //     $response->getBody()->write("NOME: {$razao} <br> CNPJ: {$name[1]}");
+    //     //     return $response;
+    //     // }
 
-    $app->redirect("/index.php", "/php/acumuladores", 200);        
-    $app->redirect("/php", "/php/acumuladores", 200);        
+    //     $response->getBody()->write("abacate");
+    //     // return $response->withStatus(400);
+
+    //     return defaultJsonMessage($response, true, "abacate", 200);
+    // });       
 };

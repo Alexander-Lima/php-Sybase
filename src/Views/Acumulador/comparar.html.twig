@@ -11,11 +11,11 @@
 
 <body class="container h-100 w-75 d-flex flex-column justify-content-center bg-body-secondary">
     <div class="border h-100 border-2 border-primary rounded-4 m-3 bg-white shadow overflow-hidden">
-        <h1 class="text-center bg-primary text-light p-2">Erros encontrados</h1>
+        <h1 class="text-center bg-primary text-light p-2">Diferenças encontradas</h1>
         <div class="overflow-y-auto h-100 ps-3 pe-3">
             {% if errors|length == 0 %}
                 <div class="d-flex justify-content-center align-items-center h-100">
-                    <h2 class="fs-4">Nenhum erro encontrado.</h2>
+                    <h2 class="fs-4">Nenhuma diferença encontrada.</h2>
                 </div>
             {% endif %}
             {% for error in errors %}
