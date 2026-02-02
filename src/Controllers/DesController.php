@@ -1,7 +1,6 @@
 <?php
 namespace Controller\Controllers;
 
-use Controller\Classes\DefaultJsonResponse;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Controller\Service\DesService;
