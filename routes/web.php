@@ -3,6 +3,7 @@
 use Slim\App;
 use Controller\Controllers\AcumuladorController;
 use Controller\Controllers\DesController;
+use Controller\Controllers\EmpresasListagemController;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -12,6 +13,8 @@ return function(App $app) {
 
     $app->get("/php/des", [DesController::class, 'index']);
     $app->post("/php/des", [DesController::class, 'generate']);
+
+    $app->get("/php/empresas", [EmpresasListagemController::class, 'index']);
 
     // $app->get("/php/teste", function(Request $request, Response $response, array $args){
     //     // $cn = explode(",", $_SERVER['SSL_CLIENT_SUBJECT']);
