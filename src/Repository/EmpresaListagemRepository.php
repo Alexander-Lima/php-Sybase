@@ -49,7 +49,16 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                     WHEN empresas.stat_emp = 'I' THEN 'INATIVA'
                     WHEN empresas.stat_emp = 'M' THEN 'ATIVA-SEM MOV.'
                     ELSE 'OUTRO'
-                END) AS status_dominio
+                END) AS status_dominio,
+
+                (CASE WHEN empresas.stat_emp = 'I' THEN
+                    CASE
+                        WHEN empresas.tipoi_emp = 1 THEN 'INATIVA'
+                        WHEN empresas.tipoi_emp = 2 THEN 'BAIXADA'
+                        WHEN empresas.tipoi_emp = 3 THEN 'TRANSFERIDA'
+                        WHEN empresas.tipoi_emp = 4 THEN 'INADIMPLENTE'
+                    END 
+                END) AS tipo_inatividade
         
                 FROM bethadba.geempre AS empresas
             

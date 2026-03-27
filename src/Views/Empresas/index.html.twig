@@ -48,7 +48,7 @@
           {% if empresa.status_dominio == "ATIVA" %}
               <span class="badge bg-success">{{ empresa.status_dominio }}</span>
           {% elseif empresa.status_dominio == "INATIVA" %}
-              <span class="badge bg-danger">{{ empresa.status_dominio }}</span>
+              <span class="badge bg-danger">{{ empresa.tipo_inatividade }}</span>
           {% else %}
               <div class="badge bg-secondary">
                 <span class="d-block">ATIVA</span>
