@@ -15,6 +15,7 @@ return function(App $app) {
     $app->post("/php/des", [DesController::class, 'generate']);
 
     $app->get("/php/empresas", [EmpresasListagemController::class, 'index']);
+    $app->get("/php/empresas_xlsx", [EmpresasListagemController::class, 'getXlsx']);
 
     // $app->get("/php/teste", function(Request $request, Response $response, array $args){
     //     // $cn = explode(",", $_SERVER['SSL_CLIENT_SUBJECT']);

@@ -22,6 +22,7 @@
         "vlucas/phpdotenv": "^5.6",
         "slim/psr7": "^1.7",
         "php-di/php-di": "^7.1",
-        "twig/twig": "^3.21"
+        "twig/twig": "^3.21",
+        "phpoffice/phpspreadsheet": "^5.5"
     }
 }

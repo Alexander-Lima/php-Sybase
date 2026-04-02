@@ -24,7 +24,7 @@ return [
     Environment::class => fn()  => 
         new Environment(
             new FilesystemLoader(__DIR__ . "/../src/Views"), 
-            ['cache' => __DIR__ . "/../src/Views/cache"]),
-            // ['cache' => false]),
+            // ['cache' => __DIR__ . "/../src/Views/cache"]),
+            ['cache' => false]),
     EmpresaRepositoryInterface::class => autowire(EmpresaRepository::class),
 ];

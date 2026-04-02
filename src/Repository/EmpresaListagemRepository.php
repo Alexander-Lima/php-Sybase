@@ -12,12 +12,12 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
     {
         $query = 
             "SELECT    
-                empresas.cgce_emp AS cnpj,
+                ' ' + empresas.cgce_emp AS cnpj,
                 empresas.razao_emp as razao_social,
                 empresas.esta_emp AS estado, 
             (CASE 
                 WHEN empresas.iest_emp IS NULL THEN '-'  
-                ELSE empresas.iest_emp
+                ELSE ' ' + empresas.iest_emp
             END) AS insc_estadual,
             (SELECT 
                 municipios.NOME_MUNICIPIO_ACENTUADO_MINUSCULO
@@ -27,10 +27,11 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                 WHERE municipios.codigo_municipio = empresas.codigo_municipio) AS municipio,
             (CASE 
                 WHEN empresas.imun_emp IS NULL THEN '-'  
-                ELSE empresas.imun_emp
+                ELSE ' ' + empresas.imun_emp
             END) AS insc_municipal, 
             (CASE
-                WHEN parametros.optante = 'S' THEN 'SIMPLES NACIONAL'
+                WHEN param_simples.mei = 'S' THEN 'MEI'
+                WHEN param_simples.optante = 'S' THEN 'SIMPLES NACIONAL'
                 ELSE (SELECT
                 (CASE
                     WHEN parametros.RFED_PAR  = 1 THEN 'LUCRO REAL'
@@ -58,7 +59,9 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                         WHEN empresas.tipoi_emp = 3 THEN 'TRANSFERIDA'
                         WHEN empresas.tipoi_emp = 4 THEN 'INADIMPLENTE'
                     END 
-                END) AS tipo_inatividade
+                END) AS tipo_inatividade,
+
+                DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') as data_inatividade
         
                 FROM bethadba.geempre AS empresas
             
@@ -68,7 +71,8 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
             
                 JOIN (SELECT 
                     consulta_simples.codigo AS codigo,
-                    consulta_simples.opt  AS optante
+                    consulta_simples.opt  AS optante,
+                    consulta_simples.mei
                 FROM
                     (SELECT table1.CODI_EMP AS codigo, MAX(table1.VIGENCIA_PAR) AS maxdate 
                     FROM bethadba.EFPARAMETRO_VIGENCIA AS table1
@@ -77,12 +81,13 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                     (SELECT   
                         table2.CODI_EMP AS codigo,
                         table2.VIGENCIA_PAR AS vigencia,
-                        table2.SIMPLESN_OPTANTE_PAR AS opt
+                        table2.SIMPLESN_OPTANTE_PAR AS opt,
+                        table2.SIMPLESN_MEI_PAR AS mei
                     FROM bethadba.EFPARAMETRO_VIGENCIA AS table2) AS consulta_simples
                 ON maxvigencia.codigo = consulta_simples.codigo
-                AND maxvigencia.maxdate = consulta_simples.vigencia) AS parametros
+                AND maxvigencia.maxdate = consulta_simples.vigencia) AS param_simples
             
-                ON empresas.codi_emp =  parametros.codigo
+                ON empresas.codi_emp =  param_simples.codigo
                 
                 WHERE empresas.tins_emp = 1
                     AND empresas.codi_emp < 99999
