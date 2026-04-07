@@ -90,8 +90,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                 ON empresas.codi_emp =  param_simples.codigo
                 
                 WHERE empresas.tins_emp = 1
-                    AND empresas.codi_emp < 99999
-                    AND empresas.codi_emp NOT IN (110, 111, 112, 113, 9999)  
+                    AND empresas.apel_emp NOT LIKE '\_%' ESCAPE '\'  
                         
                 ORDER BY empresas.razao_emp";
 
