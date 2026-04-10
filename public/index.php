@@ -15,6 +15,7 @@ $container = $builder->build();
 
 AppFactory::setContainer($container);
 $app = AppFactory::create();
+$app->setBasePath("/php");
 (require '../routes/web.php')($app);
 
 $app->run();
