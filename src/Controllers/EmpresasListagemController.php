@@ -1,9 +1,8 @@
 <?php
 namespace Controller\Controllers;
 
+use Controller\Classes\DefaultXlsResponse;
 use Controller\Service\EmpresasListagemService;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Twig\Environment;
@@ -26,21 +25,10 @@ class EmpresasListagemController
     public function getXlsx(Request $request, Response $response, array $args) {
         $spreadSheet = $this->service->getEmpresasXlsx();
         $filePath = __DIR__ . "/../../tmp/empresas.xlsx";
-        $writer = new Xlsx($spreadSheet);
-        $writer->save($filePath);
-
-        if(!\file_exists($filePath)) {
-            return $response->withStatus(404);
-        }
-
-        $response->getBody()->write(file_get_contents($filePath));
-        $fileSize = filesize($filePath);
-        unlink($filePath);
-
-        return $response
-                ->withAddedHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                ->withAddedHeader("Content-Disposition", "attachment;filename=empresas.xlsx")
-                ->withAddedHeader("Cache-Control", "max-age=0")
-                ->withAddedHeader('Content-Length', $fileSize);
+ 
+        return DefaultXlsResponse::create($response, $filePath)
+                ->saveToFile($spreadSheet)
+                ->deleteAfter(true)
+                ->build();
     }
 }
