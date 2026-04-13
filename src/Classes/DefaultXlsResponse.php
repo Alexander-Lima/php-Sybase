@@ -2,7 +2,6 @@
 
 namespace Controller\Classes;
 
-use Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -16,8 +15,10 @@ class DefaultXlsResponse
         return new DefaultXlsResponse($response, $filePath);
     }
 
-    public function saveToFile(Spreadsheet $spreadsheet): DefaultXlsResponse {
-        (new Xlsx($spreadsheet))->save($this->filePath);
+    public function saveToFile(?Spreadsheet $spreadsheet): DefaultXlsResponse {
+        if($spreadsheet) {
+            (new Xlsx($spreadsheet))->save($this->filePath);
+        }
 
         return $this;
     }
@@ -45,7 +46,7 @@ class DefaultXlsResponse
 
         return $this->response
                 ->withAddedHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                ->withAddedHeader("Content-Disposition", "attachment;filename=empresas.xlsx")
+                ->withAddedHeader("Content-Disposition", "attachment;filename=" . basename($this->filePath))
                 ->withAddedHeader("Cache-Control", "max-age=0")
                 ->withAddedHeader('Content-Length', $filesize);
     }

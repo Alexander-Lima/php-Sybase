@@ -9,7 +9,8 @@ class DefaultJsonResponse
     private function __construct(private Response $response){}
     private array $responseBody = [
         "message" => "",
-        "success" => false
+        "success" => false,
+        "data" => null
     ];
     private int $statusCode = 400;
 
@@ -25,6 +26,12 @@ class DefaultJsonResponse
 
     public function withMessage(string $message) {
         $this->responseBody["message"] = $message;
+        
+        return $this;
+    }
+
+    public function withData(array $data) {
+        $this->responseBody["data"] = $data;
         
         return $this;
     }

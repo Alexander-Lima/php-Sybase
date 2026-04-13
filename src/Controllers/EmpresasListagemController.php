@@ -1,6 +1,7 @@
 <?php
 namespace Controller\Controllers;
 
+use Controller\Classes\DefaultJsonResponse;
 use Controller\Classes\DefaultXlsResponse;
 use Controller\Service\EmpresasListagemService;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -22,10 +23,20 @@ class EmpresasListagemController
         return $response;
     }
 
-    public function getXlsx(Request $request, Response $response, array $args) {
+    public function getListXls(Request $request, Response $response, array $args) {
         $spreadSheet = $this->service->getEmpresasXlsx();
         $filePath = __DIR__ . "/../../tmp/empresas.xlsx";
  
+        return DefaultXlsResponse::create($response, $filePath)
+                ->saveToFile($spreadSheet)
+                ->deleteAfter(true)
+                ->build();
+    }
+
+    public function getECFListXls(Request $request, Response $response, array $args) {
+        $spreadSheet = $this->service->getEmpresasECFListXlsx($args['year']);
+        $filePath = __DIR__ . "/../../tmp/empresas_ecf.xlsx";
+
         return DefaultXlsResponse::create($response, $filePath)
                 ->saveToFile($spreadSheet)
                 ->deleteAfter(true)
