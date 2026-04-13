@@ -41,21 +41,21 @@
     <tbody class="text-center align-middle">
     {% for empresa in empresas %}
       <tr>
-        <td>{{ empresa.cnpj }}</td>
-        <td class="text-left">{{ empresa.razao_social }}</td>
-        <td>{{ empresa.estado }}</td>
-        <td>{{ empresa.insc_estadual }}</td>
-        <td>{{ empresa.municipio }}</td>
-        <td>{{ empresa.insc_municipal }}</td>
-        <td>{{ empresa.regime }}</td>
+        <td>{{ empresa['CNPJ'] }}</td>
+        <td class="text-left">{{ empresa['RAZÃO SOCIAL'] }}</td>
+        <td>{{ empresa['UF'] }}</td>
+        <td>{{ empresa['INSCRIÇÃO ESTADUAL'] }}</td>
+        <td>{{ empresa['MUNICÍPIO'] }}</td>
+        <td>{{ empresa['INSCRIÇÃO MUNICIPAL'] }}</td>
+        <td>{{ empresa['REGIME'] }}</td>
         <td>
-          {% if empresa.status_dominio == "ATIVA" %}
-              <span class="badge bg-success">{{ empresa.status_dominio }}</span>
-          {% elseif empresa.status_dominio == "INATIVA" %}
+          {% if empresa['STATUS DOMÍNIO'] == "ATIVA" %}
+              <span class="badge bg-success">{{ empresa['STATUS DOMÍNIO'] }}</span>
+          {% elseif empresa['STATUS DOMÍNIO'] == "INATIVA" %}
               <span class="badge bg-danger">
-                {{ empresa.tipo_inatividade }}
+                {{ empresa['TIPO INATIVIDADE'] }}
                 <br>
-                ({{ empresa.data_inatividade }})
+                ({{ empresa['DATA INATIVIDADE'] }})
               </span>
           {% else %}
               <div class="badge bg-secondary">

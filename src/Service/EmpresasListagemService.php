@@ -16,23 +16,11 @@ class EmpresasListagemService
     }
 
     public function getEmpresasXlsx(): Spreadsheet {
-        $headers = [
-            "CNPJ",
-            "RAZÃO SOCIAL",
-            "UF",
-            "INSCRIÇÃO ESTADUAL",
-            "MUNICÍPIO",
-            "INSCRIÇÃO MUNICIPAL",
-            "REGIME TRIBUTÁRIO",
-            "STATUS DOMÍNIO"
-        ];
-
-        $spreadsheet = $this->getSpreadSheet("Listagem empresas", $headers);
-
-        $data = $this->formatData($this->repository->getListaEmpresas());
-        $spreadsheet->getActiveSheet()->fromArray($data, NULL, "A2");
-
-        return $spreadsheet;
+        return $this
+            ->getSpreadsheetWithData(
+                "Listagem empresas ECF",
+                $this->repository->getListaEmpresas()
+            );
     }
 
     public function getEmpresasECFListXlsx(string $year): Spreadsheet | null {
@@ -40,37 +28,11 @@ class EmpresasListagemService
             return null;
         }
 
-        $headers = [
-            "CÓDIGO",
-            "CNPJ",
-            "TIPO",
-            "RAZÃO SOCIAL",
-            "VIGÊNCIA",
-            "DATA INATIVAÇÃO",
-            "STATUS DOMÍNIO",
-            "TIPO INATIVIDADE",
-            "INÍCIO FISCAL",
-            "REGIME TRIBUTÁRIO"
-        ];
-
-        $spreadsheet = $this->getSpreadSheet("Listagem empresas ECF", $headers);
-
-        $data = $this->repository->getListaEmpresasECF($year);
-        $spreadsheet->getActiveSheet()->fromArray($data, NULL, "A2");
-        $this->resizeAllColumns($spreadsheet->getActiveSheet());
-
-        return $spreadsheet;
-    }
-
-    private function formatData(array $data): array {
-        foreach($data as &$item) {
-            if($item['status_dominio'] === 'INATIVA') {
-                $item['status_dominio'] = "INATIVA |{$item['tipo_inatividade']}| {$item['data_inatividade']}";
-                $item['tipo_inatividade'] = $item['data_inatividade']  = NULL;
-            }
-        }
-
-        return $data;
+        return $this
+            ->getSpreadsheetWithData(
+                "Listagem empresas ECF",
+                $this->repository->getListaEmpresasECF($year)
+            );
     }
 
     private function setHeaders(array $headers, Worksheet $sheet): void {
@@ -102,12 +64,13 @@ class EmpresasListagemService
         }
     }
 
-    private function getSpreadSheet(string $title, array $headers): Spreadsheet {
+    private function getSpreadsheetWithData(string $title, array $data): Spreadsheet {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle($title);
+        $spreadsheet->getActiveSheet()->fromArray($data, "-", "A2");
 
-        $this->setHeaders($headers, $sheet);
+        $this->setHeaders(array_keys($data[0]), $sheet);
         $this->resizeAllColumns($sheet);
 
         return $spreadsheet;

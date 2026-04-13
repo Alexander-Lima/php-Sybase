@@ -12,23 +12,23 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
     {
         $query = 
             "SELECT    
-                ' ' + empresas.cgce_emp AS cnpj,
-                empresas.razao_emp as razao_social,
-                empresas.esta_emp AS estado, 
+                ' ' + empresas.cgce_emp AS CNPJ,
+                empresas.razao_emp AS 'RAZÃO SOCIAL',
+                empresas.esta_emp AS 'UF', 
             (CASE 
                 WHEN empresas.iest_emp IS NULL THEN '-'  
                 ELSE ' ' + empresas.iest_emp
-            END) AS insc_estadual,
+            END) AS 'INSCRIÇÃO ESTADUAL',
             (SELECT 
                 municipios.NOME_MUNICIPIO_ACENTUADO_MINUSCULO
         
                 FROM bethadba.gemunicipio AS municipios 
         
-                WHERE municipios.codigo_municipio = empresas.codigo_municipio) AS municipio,
+                WHERE municipios.codigo_municipio = empresas.codigo_municipio) AS MUNICÍPIO,
             (CASE 
                 WHEN empresas.imun_emp IS NULL THEN '-'  
                 ELSE ' ' + empresas.imun_emp
-            END) AS insc_municipal, 
+            END) AS 'INSCRIÇÃO MUNICIPAL', 
             (CASE
                 WHEN param_simples.mei = 'S' THEN 'MEI'
                 WHEN param_simples.optante = 'S' THEN 'SIMPLES NACIONAL'
@@ -44,13 +44,13 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                     (SELECT MAX(param.VIGENCIA_PAR)
                         FROM bethadba.EFPARAMETRO_VIGENCIA AS param
                         WHERE param.CODI_EMP = empresas.codi_emp) AND parametros.CODI_EMP = empresas.codi_emp) 
-                END) AS regime,
+                END) AS REGIME,
                 (CASE
                     WHEN empresas.stat_emp = 'A' THEN 'ATIVA'
                     WHEN empresas.stat_emp = 'I' THEN 'INATIVA'
                     WHEN empresas.stat_emp = 'M' THEN 'ATIVA-SEM MOV.'
                     ELSE 'OUTRO'
-                END) AS status_dominio,
+                END) AS 'STATUS DOMÍNIO',
 
                 (CASE WHEN empresas.stat_emp = 'I' THEN
                     CASE
@@ -59,9 +59,9 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                         WHEN empresas.tipoi_emp = 3 THEN 'TRANSFERIDA'
                         WHEN empresas.tipoi_emp = 4 THEN 'INADIMPLENTE'
                     END 
-                END) AS tipo_inatividade,
+                END) AS 'TIPO INATIVIDADE',
 
-                DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') as data_inatividade
+                DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') AS 'DATA INATIVIDADE'
         
                 FROM bethadba.geempre AS empresas
             
@@ -104,21 +104,21 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
             SET @year = ?
 
             SELECT
-                max_vigencias.CODI_EMP AS codigo,
-                ' ' + empresas.cgce_emp AS cnpj,
+                max_vigencias.CODI_EMP AS CÓDIGO,
+                ' ' + empresas.cgce_emp AS CNPJ,
                 (CASE
                     WHEN SUBSTRING(empresas.cgce_emp, 12, 1) = '1' THEN 'M'
                     ELSE 'F'
-                END) AS tipo,
-                empresas.nome_emp AS nome,
-                DATEFORMAT(max_vigencias.vigencia, 'MM/YYYY') AS vigencia,
-                DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') AS data_inativacao,
+                END) AS TIPO,
+                empresas.razao_emp AS 'RAZÃO SOCIAL',
+                DATEFORMAT(max_vigencias.vigencia, 'MM/YYYY') AS VIGÊNCIA,
+                DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') AS 'DATA INATIVAÇÃO',
                 (CASE
                     WHEN empresas.stat_emp = 'A' THEN 'ATIVA'
                     WHEN empresas.stat_emp = 'I' THEN 'INATIVA'
                     WHEN empresas.stat_emp = 'M' THEN 'ATIVA-SEM MOV.'
                     ELSE 'OUTROS'
-                END) AS status_dominio,
+                END) AS 'STATUS DOMÍNIO',
                 (CASE WHEN empresas.stat_emp = 'I' THEN
                     CASE
                         WHEN empresas.tipoi_emp = 1 THEN 'OUTROS'
@@ -126,8 +126,8 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                         WHEN empresas.tipoi_emp = 3 THEN 'TRANSFERIDA'
                         WHEN empresas.tipoi_emp = 4 THEN 'INADIMPLENTE'
                     END 
-                END) AS tipo_inatividade,
-                DATEFORMAT(param_geral.INICIOEFETIVO_PAR, 'DD/MM/YYYY') AS inicio_fiscal,
+                END) AS 'TIPO INATIVIDADE',
+                DATEFORMAT(param_geral.INICIOEFETIVO_PAR, 'DD/MM/YYYY') AS 'INÍCIO FISCAL',
                 (CASE
                     WHEN vigenciaS.RFED_PAR = 1 THEN 'LUCRO REAL'
                     WHEN vigenciaS.RFED_PAR = 2 OR vigenciaS.RFED_PAR = 4 THEN 'SIMPLES NACIONAL'
@@ -135,7 +135,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                     WHEN vigenciaS.RFED_PAR = 8 THEN 'IMUNE IRPJ'
                     WHEN vigenciaS.RFED_PAR = 9 THEN 'ISENTA IRPJ'
                     ELSE STR(vigenciaS.RFED_PAR)
-                END) AS regime
+                END) AS REGIME
             FROM (SELECT 
                     CODI_EMP,
                     MAX(VIGENCIA_PAR) AS vigencia
@@ -156,6 +156,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                 (SELECT 
                     codi_emp,
                     nome_emp,
+                    razao_emp,
                     cgce_emp,
                     tins_emp,
                     stat_emp,
@@ -174,7 +175,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
 
             WHERE empresas.tins_emp = 1
                 AND empresas.apel_emp NOT LIKE '\_%' ESCAPE '\'
-                AND (data_inativacao IS NULL OR empresas.dina_emp >= CAST(STR(@year) + '-01' AS DATE))
+                AND (empresas.dina_emp IS NULL OR empresas.dina_emp >= CAST(STR(@year) + '-01' AS DATE))
                 AND regime != 'SIMPLES NACIONAL'
                 AND tipo = 'M'
 

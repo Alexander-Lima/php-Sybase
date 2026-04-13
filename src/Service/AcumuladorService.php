@@ -29,15 +29,15 @@ class AcumuladorService
         $dataObjects = [];
 
         foreach($dataArray as $array) {
-            if(array_key_exists($array["codAcumulador"], $dataObjects)) {
-                $dataObjects[$array["codAcumulador"]]
-                    ->addImpostos(new Imposto($array["codImposto"], $array["aliqImposto"]))
-                    ->addCfop($array["cfop"])
-                    ->addCfps($array["cfps"]);
+            if(!\array_key_exists($array["codAcumulador"], $dataObjects)) {
+                $dataObjects[$array["codAcumulador"]] = Acumulador::createFromArray($array);
                 continue;
             }
 
-            $dataObjects[$array["codAcumulador"]] = Acumulador::createFromArray($array);
+            $dataObjects[$array["codAcumulador"]]
+                ->addImpostos(new Imposto($array["codImposto"], $array["aliqImposto"]))
+                ->addCfop($array["cfop"])
+                ->addCfps($array["cfps"]);
         }
 
         return $dataObjects;

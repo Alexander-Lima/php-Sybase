@@ -10,8 +10,6 @@ class EmpresaService
 
     public function getEmpresas(): array
     {
-        return array_map(
-            fn($item) => Empresa::createFromArray($item), 
-            $this->repository->getEmpresas());
+        return array_map([Empresa::class, 'createFromArray'], $this->repository->getEmpresas());
     }
 }

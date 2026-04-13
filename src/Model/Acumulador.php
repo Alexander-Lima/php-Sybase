@@ -238,7 +238,7 @@ class Acumulador implements JsonSerializable
                 continue;
             }
 
-            if(is_array($thisMethodResult)) {
+            if(\is_array($thisMethodResult)) {
                 $thisMethodResult = implode(", ",$thisMethodResult);
                 $compareClassMethodResult = implode(", ",$compareClassMethodResult);
             }

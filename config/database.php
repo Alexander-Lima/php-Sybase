@@ -35,7 +35,7 @@ class Database
     /**
      * @param string $query the sql query to use.
      * @param array $bindParams use associative array with type and value ["type" => "x", "value" => "y"].
-     * @return array.
+     * @return array
     **/
     public function fetchPreparedAssoc(string $query, array $bindParams): array {
         $resultSet = [];
