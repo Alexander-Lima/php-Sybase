@@ -1,5 +1,6 @@
 <?php
 
+use Controller\Classes\DefaultJsonResponse;
 use Slim\App;
 use Controller\Controllers\AcumuladorController;
 use Controller\Controllers\DesController;
@@ -24,6 +25,35 @@ return function(App $app) {
         $group->get("/listagem_xls", [EmpresasListagemController::class, 'getListXls']);
         $group->get("/ecf_xls/{year}", [EmpresasListagemController::class, 'getECFListXls']);
     });
+
+    $app->get("/rotas", function(Request $request, Response $response, array $args) use ($app) {
+        $routes = array_filter(
+            $app->getRouteCollector()->getRoutes(),
+            fn($route) => $route->getPattern() != '/rotas'
+        );
+
+        $routeNames = array_map(
+            fn($item) => 
+                sprintf("
+                    <li style='padding: 5px 0; font-size: 1.1em;'>
+                        <a style='color: #000000;' href='/php%s'>[%s] /php%s</a>
+                    </li>",
+                    $item->getPattern(),
+                    strtolower(join(",", $item->getMethods())),
+                    $item->getPattern()
+                ),
+            $routes
+        );
+
+        $response->getBody()->write(
+            sprintf(
+                "<h1>Rotas</h1>
+                <ul style='padding-left: 4em;'>%s</ul>", 
+            join('', $routeNames)));
+
+        return $response;
+    });
+
 
     // $app->get("/php/teste", function(Request $request, Response $response, array $args){
     //     $response->getBody()->write("abacate");
