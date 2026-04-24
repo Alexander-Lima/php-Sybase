@@ -24,11 +24,11 @@ class DesGenerator
                 continue;
             } 
 
-            $invoiceData->dCompet = (string) $xml->infNFSe->DPS->infDPS->dCompet ?? "";
-            $invoiceData->nNFSE = (string) $xml->infNFSe->nNFSe ?? "";
-            $invoiceData->vBC = (string) $xml->infNFSe->valores->vBC ?? "";
-            $invoiceData->CPF = (string) $xml->infNFSe->DPS->infDPS->toma->CPF ?? "";
-            $invoiceData->CNPJ = (string) $xml->infNFSe->DPS->infDPS->toma->CNPJ ?? "";
+            $invoiceData->dCompet = (string) $xml->infNFSe->DPS->infDPS->dCompet;
+            $invoiceData->nNFSE = (string) $xml->infNFSe->nNFSe;
+            $invoiceData->vBC = (string) ($xml->infNFSe->valores->vBC ?? $xml->infNFSe->valores->vLiq);
+            $invoiceData->CPF = (string) $xml->infNFSe->DPS->infDPS->toma->CPF;
+            $invoiceData->CNPJ = (string) $xml->infNFSe->DPS->infDPS->toma->CNPJ;
 
             $data[] = $invoiceData;
         }
