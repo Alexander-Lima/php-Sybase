@@ -2,6 +2,7 @@
 namespace Controller\Service;
 
 use Controller\Repository\EmpresaListagemRepository;
+use Controller\Repository\SistemaRepository;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -9,17 +10,23 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class EmpresasListagemService
 {
-    public function __construct(private EmpresaListagemRepository $repository){}
+    public function __construct(
+        private EmpresaListagemRepository $empresasRepository,
+        private SistemaRepository $sistemaRepository){}
 
     public function getEmpresas(): array {
-        return $this->repository->getListaEmpresas();
+        return $this->empresasRepository->getListaEmpresas();
+    }
+
+    public function getVersao(): string {
+        return $this->sistemaRepository->getVersion();
     }
 
     public function getEmpresasXlsx(): Spreadsheet {
         return $this
             ->getSpreadsheetWithData(
                 "Listagem empresas ECF",
-                $this->repository->getListaEmpresas()
+                $this->empresasRepository->getListaEmpresas()
             );
     }
 
@@ -31,7 +38,7 @@ class EmpresasListagemService
         return $this
             ->getSpreadsheetWithData(
                 "Listagem empresas ECF",
-                $this->repository->getListaEmpresasECF($year)
+                $this->empresasRepository->getListaEmpresasECF($year)
             );
     }
 

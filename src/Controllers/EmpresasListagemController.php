@@ -15,8 +15,12 @@ class EmpresasListagemController
         private ?Environment $twig){}
     
     public function index(Request $request, Response $response, array $args) {
-        $data = $this->service->getEmpresas();
-        $view = $this->twig->render("/Empresas/index.html.twig", ["empresas" => $data]);
+        $view = 
+            $this->twig->render("/Empresas/index.html.twig",
+            [
+                "empresas" => $this->service->getEmpresas(),
+                "versao" => $this->service->getVersao()
+            ]);
 
         $response->getBody()->write($view);
 
