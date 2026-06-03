@@ -10,8 +10,13 @@ class SistemaRepository implements SistemaRepositoryInterface
 
     public function getVersion(): string
     {
-        $query = "SELECT vsis_contabil AS versao FROM bethadba.geprop";
+        $query = "SELECT vsis_contabil, asis_contabil FROM bethadba.geprop";
+        $result = ($this->database->fetchAssoc($query))[0];
 
-        return ($this->database->fetchAssoc($query))[0]['versao'];
+        return \sprintf(
+            "%s-%s",
+            $result["vsis_contabil"],
+            $result["asis_contabil"] > 10 ?: "0{$result["asis_contabil"]}"
+        );
     }
 }
