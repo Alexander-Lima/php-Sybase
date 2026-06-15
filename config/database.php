@@ -4,17 +4,18 @@ namespace Controller\Config;
 class Database
 {
     private $connection = null;
-
+    
     private function getConnection() {
         if($this->connection === null) {
             $this->connection = 
             sasql_connect(
-                "HOST=" . $_ENV["HOST"] . ":" . $_ENV["PORT"]  . ";" .
-                "DBN=" . $_ENV["DBN"]  . ";" .
-                "UID=" . $_ENV["UID"]  .  ";" .
-                "PWD=" . $_ENV["PWD"]  . ";" .
-                "ServerName=" . $_ENV["SERVER"]  . ";" .
-                "charset=" . $_ENV["CHARSET"] 
+                "HOST={$_ENV["HOST"]}:{$_ENV["PORT"]};" .
+                "DBN={$_ENV["DBN"]};" .
+                "UID={$_ENV["UID"]};" .
+                "PWD={$_ENV["PWD"]};" .
+                "ServerName={$_ENV["SERVER"]};" .
+                "CharSet={$_ENV["CHARSET"]};" .
+                "IDLE=1"
             );
         }
 
