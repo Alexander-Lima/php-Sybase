@@ -4,7 +4,7 @@ namespace Controller\Config;
 class Database
 {
     private $connection = null;
-
+    
     private function getConnection() {
         if($this->connection === null) {
             $this->connection = 
@@ -14,7 +14,8 @@ class Database
                 "UID=" . $_ENV["UID"]  .  ";" .
                 "PWD=" . $_ENV["PWD"]  . ";" .
                 "ServerName=" . $_ENV["SERVER"]  . ";" .
-                "charset=" . $_ENV["CHARSET"] 
+                "charset=" . $_ENV["CHARSET"]  . ";" .
+                "IDLE=1"
             );
         }
 
