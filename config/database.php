@@ -5,6 +5,7 @@ class Database
 {
     private $connection = null;
     
+    
     private function getConnection() {
         if($this->connection === null) {
             $this->connection = 
