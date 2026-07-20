@@ -99,7 +99,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
         $data = $this->database->fetchAssoc($query);
 
         if($filter) {
-            return array_filter($data, $filter);
+            return array_values(array_filter($data, $filter));
         }
     
         return $data;
