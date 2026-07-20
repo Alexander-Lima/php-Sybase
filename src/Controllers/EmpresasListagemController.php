@@ -67,4 +67,12 @@ class EmpresasListagemController
             ->isSuccessfull(true)
             ->build();
     }
+
+    public function updateComment(Request $request, Response $response, array $args) {
+        $body = $request->getParsedBody();
+        return DefaultJsonResponse::create($response)
+            ->withData($this->service->getEmpresas())
+            ->isSuccessfull(true)
+            ->build();
+    }
 }

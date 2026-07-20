@@ -27,6 +27,11 @@ return function(App $app) {
         $group->get("/json/[{status}]", [EmpresasListagemController::class, 'getActivesListAsJson']);
     });
 
+    $app->group("/json/empresas", function (RouteCollectorProxy $group) {
+        $group->get("/[{status}]", [EmpresasListagemController::class, 'getActivesListAsJson']);
+        $group->put("", [EmpresasListagemController::class, 'updateComment']);
+    });
+
     $app->get("/rotas", function(Request $request, Response $response, array $args) use ($app) {
         $routes = array_filter(
             $app->getRouteCollector()->getRoutes(),
