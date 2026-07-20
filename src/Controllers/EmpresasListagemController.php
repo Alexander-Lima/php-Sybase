@@ -46,4 +46,25 @@ class EmpresasListagemController
                 ->deleteAfter(true)
                 ->build();
     }
+
+    public function getActivesListAsJson(Request $request, Response $response, array $args) {
+        $filter = null;
+
+        if(isset($args["status"])) {
+            $par = strtoupper($args["status"]);
+
+            $filter = function($objKey) use ($par){
+                if($par == "ATIVA") {
+                    return $objKey['STATUS DOMÍNIO'] == $par || $objKey['STATUS DOMÍNIO'] == "ATIVA-SEM MOV.";
+                }
+                
+                return $objKey['STATUS DOMÍNIO'] == $par;
+            };
+        }
+
+        return DefaultJsonResponse::create($response)
+            ->withData($this->service->getEmpresas(filter: $filter))
+            ->isSuccessfull(true)
+            ->build();
+    }
 }

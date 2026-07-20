@@ -14,8 +14,8 @@ class EmpresasListagemService
         private EmpresaListagemRepository $empresasRepository,
         private SistemaRepository $sistemaRepository){}
 
-    public function getEmpresas(): array {
-        return $this->empresasRepository->getListaEmpresas();
+    public function getEmpresas(callable | null $filter = null, bool | null $observation = true): array {
+        return $this->empresasRepository->getListaEmpresas($filter, $observation);
     }
 
     public function getVersao(): string {
@@ -26,7 +26,7 @@ class EmpresasListagemService
         return $this
             ->getSpreadsheetWithData(
                 "Listagem empresas ECF",
-                $this->empresasRepository->getListaEmpresas()
+                $this->empresasRepository->getListaEmpresas(observation: false)
             );
     }
 

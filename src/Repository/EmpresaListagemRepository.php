@@ -8,7 +8,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
 {
     public function __construct(private Database $database){}
 
-    public function getListaEmpresas(): array
+    public function getListaEmpresas(callable | null $filter = null, bool | null $observation = true): array
     {
         $query = 
             "SELECT    
@@ -61,9 +61,11 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                     END 
                 END) AS 'TIPO INATIVIDADE',
 
-                DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') AS 'DATA INATIVIDADE'
-        
-                FROM bethadba.geempre AS empresas
+                DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') AS 'DATA INATIVIDADE'"
+
+                . ($observation ? ", empresas.OBS_GERAL AS 'OBS'" : "") .
+                
+                "FROM bethadba.geempre AS empresas
             
                 JOIN bethadba.genatjuridica AS natureza_jur 
             
@@ -94,7 +96,13 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                         
                 ORDER BY empresas.razao_emp";
 
-        return $this->database->fetchAssoc($query);
+        $data = $this->database->fetchAssoc($query);
+
+        if($filter) {
+            return array_filter($data, $filter);
+        }
+    
+        return $data;
     }
 
     public function getListaEmpresasECF(string $year): array
