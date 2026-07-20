@@ -24,6 +24,7 @@ return function(App $app) {
         $group->get("", [EmpresasListagemController::class, 'index']);
         $group->get("/listagem_xls", [EmpresasListagemController::class, 'getListXls']);
         $group->get("/ecf_xls/{year}", [EmpresasListagemController::class, 'getECFListXls']);
+        $group->get("/json/[{status}]", [EmpresasListagemController::class, 'getActivesListAsJson']);
     });
 
     $app->get("/rotas", function(Request $request, Response $response, array $args) use ($app) {
