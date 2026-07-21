@@ -24,7 +24,6 @@ return function(App $app) {
         $group->get("", [EmpresasListagemController::class, 'index']);
         $group->get("/listagem_xls", [EmpresasListagemController::class, 'getListXls']);
         $group->get("/ecf_xls/{year}", [EmpresasListagemController::class, 'getECFListXls']);
-        $group->get("/json/[{status}]", [EmpresasListagemController::class, 'getActivesListAsJson']);
     });
 
     $app->group("/json/empresas", function (RouteCollectorProxy $group) {

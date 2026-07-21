@@ -63,7 +63,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
 
                 DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') AS 'DATA INATIVIDADE'"
 
-                . ($observation ? ", empresas.OBS_GERAL AS 'OBS'" : "") .
+                . ($observation ? ", empresas.OBS_FISCAL AS 'OBS'" : "") .
                 
                 "FROM bethadba.geempre AS empresas
             

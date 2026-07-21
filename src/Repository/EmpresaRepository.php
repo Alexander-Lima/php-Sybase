@@ -22,4 +22,13 @@ class EmpresaRepository implements EmpresaRepositoryInterface
 
         return $this->database->fetchAssoc($query);
     }
+
+    public function updateComment(string $id, string $comment): bool
+    {
+        $query = "UPDATE bethadba.geempre SET OBS_FISCAL = ? WHERE codi_emp = ?";
+
+        return $this->database->updateOrInsertPrepared(
+            $query,[["type"=> "s", "value" => $comment], ["type"=> "i", "value" => $id]]
+        );
+    }
 }

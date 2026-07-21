@@ -1,12 +1,15 @@
 <?php
 namespace Controller\Config;
 
+use Exception;
+
 class Database
 {
     private $connection = null;
     
     
-    private function getConnection() {
+    private function getConnection()
+    {
         if($this->connection === null) {
             $this->connection = 
             sasql_connect(
@@ -16,6 +19,7 @@ class Database
                 "PWD={$_ENV["PWD"]};" .
                 "ServerName={$_ENV["SERVER"]};" .
                 "CharSet={$_ENV["CHARSET"]};" .
+                "ConnectionPool=NO;" .
                 "IDLE=1"
             );
         }
@@ -23,7 +27,16 @@ class Database
         return $this->connection;
     }
 
-    public function fetchAssoc(string $query): array {
+    private function closeConnection()
+    {
+        if($this->connection !== null) {
+            sasql_close($this->connection);
+            $this->connection = null;
+        }
+    }
+
+    public function fetchAssoc(string $query): array
+    {
         $queryResult = sasql_query($this->getConnection(), $query);
         $resultSet = [];
 
@@ -39,22 +52,10 @@ class Database
      * @param array $bindParams use associative array with type and value ["type" => "x", "value" => "y"].
      * @return array
     **/
-    public function fetchPreparedAssoc(string $query, array $bindParams): array {
+    public function fetchPreparedAssoc(string $query, array $bindParams): array
+    {
         $resultSet = [];
-        $paramTypes = [];
-        $paramValues = [];
-
-        foreach($bindParams as $param) {
-            $paramValues[] = $param["value"];
-            $paramTypes[] = $param["type"];
-        }
-
-        $preparedStatement = sasql_prepare($this->getConnection(), $query);
-
-        if(!empty($paramTypes) && !empty($paramValues)) {
-            sasql_stmt_bind_param($preparedStatement, join("", $paramTypes), ...$paramValues);
-        }
-
+        $preparedStatement = $this->prepareStatement($query, $bindParams);
         sasql_stmt_execute($preparedStatement);
         $resultData = sasql_stmt_result_metadata($preparedStatement);
 
@@ -62,6 +63,44 @@ class Database
             $resultSet[] = $row;
         }
 
+        $this->closeConnection();
         return $resultSet;
+    }
+
+     /**
+     * @param string $query the sql query to use.
+     * @param array $bindParams use associative array with type and value ["type" => "x", "value" => "y"].
+     * @return bool
+    **/
+    public function updateOrInsertPrepared(string $query, array $bindParams): bool
+    {
+        $preparedStatement = $this->prepareStatement($query, $bindParams);
+        sasql_stmt_execute($preparedStatement);
+
+        $success = sasql_stmt_affected_rows($preparedStatement) > 0;
+        $this->closeConnection();
+        return  $success;
+    }
+
+    private function prepareStatement(string $query, array $bindParams)
+    {
+        $paramTypes = [];
+        $paramValues = [];
+
+        foreach($bindParams as $param) {
+            if(isset($param["value"]) && isset($param["type"])) {
+                $paramValues[] = $param["value"];
+                $paramTypes[] = $param["type"];
+                continue;
+            }
+
+            throw new Exception("Supply value and type parameters for prepared statement");
+        }
+
+        $preparedStatement = sasql_prepare($this->getConnection(), $query);
+
+        sasql_stmt_bind_param($preparedStatement, join("", $paramTypes), ...$paramValues);
+
+        return $preparedStatement;
     }
 }
