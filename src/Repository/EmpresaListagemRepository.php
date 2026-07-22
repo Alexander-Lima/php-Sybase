@@ -11,7 +11,8 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
     public function getListaEmpresas(callable | null $filter = null, bool | null $observation = true): array
     {
         $query = 
-            "SELECT    
+            "SELECT
+                empresas.codi_emp AS 'ID',     
                 ' ' + empresas.cgce_emp AS CNPJ,
                 empresas.razao_emp AS 'RAZÃO SOCIAL',
                 empresas.esta_emp AS 'UF', 
