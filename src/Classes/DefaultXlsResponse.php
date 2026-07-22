@@ -45,6 +45,7 @@ class DefaultXlsResponse
         }
 
         return $this->response
+                ->withStatus(200)
                 ->withAddedHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 ->withAddedHeader("Content-Disposition", "attachment;filename=" . basename($this->filePath))
                 ->withAddedHeader("Cache-Control", "max-age=0")

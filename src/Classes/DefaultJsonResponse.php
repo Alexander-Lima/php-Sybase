@@ -19,6 +19,10 @@ class DefaultJsonResponse
     }
 
     public function isSuccessfull(bool $success) {
+        if($success) {
+            $this->statusCode = 200;
+        }
+        
         $this->responseBody["success"] = $success;
 
         return $this;

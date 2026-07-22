@@ -65,8 +65,8 @@ class EmpresasListagemController
         }
 
         return DefaultJsonResponse::create($response)
-            ->withData($this->listagemService->getEmpresas(filter: $filter))
             ->isSuccessfull(true)
+            ->withData($this->listagemService->getEmpresas(filter: $filter))
             ->build();
     }
 
@@ -77,24 +77,21 @@ class EmpresasListagemController
 
         if(!($id && $comment)) {
             return DefaultJsonResponse::create($response)
-            ->withMessage("wrong parameters, supply id and message as json")
-            ->withStatusCode(400)
-            ->isSuccessfull(false)
-            ->build();
+                ->withMessage("wrong parameters, supply id and message as json")
+                ->isSuccessfull(false)
+                ->build();
         }
 
         $success = $this->empresaService->updateComment($id, $comment);
 
         if($success) {
             return DefaultJsonResponse::create($response)
-                ->withStatusCode(200)
                 ->isSuccessfull(true)
                 ->build();
         }
 
         return DefaultJsonResponse::create($response)
             ->isSuccessfull(false)
-            ->withStatusCode(400)
             ->withMessage("failed to update comment")
             ->build();
     }
