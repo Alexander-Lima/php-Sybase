@@ -13,8 +13,8 @@ class EmpresaService
         return array_map([Empresa::class, 'createFromArray'], $this->repository->getEmpresas());
     }
 
-    public function updateComment(string $id, string $comment): bool
+    public function updateComment(string $id, string $details): bool
     {
-        return $this->repository->updateComment($id, $comment);
+        return $this->repository->updateComment($id, $details);
     }
 }

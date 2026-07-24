@@ -8,7 +8,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
 {
     public function __construct(private Database $database){}
 
-    public function getListaEmpresas(callable | null $filter = null, bool | null $observation = true): array
+    public function getListaEmpresas(callable | null $filter = null, bool | null $details = true): array
     {
         $query = 
             "SELECT
@@ -64,7 +64,7 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
 
                 DATEFORMAT(empresas.dina_emp, 'DD/MM/YYYY') AS 'DATA INATIVIDADE'"
 
-                . ($observation ? ", empresas.OBS_FISCAL AS 'OBS'" : "") .
+                . ($details ? ", empresas.OBS_FISCAL AS 'DETAILS'" : "") .
                 
                 "FROM bethadba.geempre AS empresas
             

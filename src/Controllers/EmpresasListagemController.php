@@ -70,19 +70,19 @@ class EmpresasListagemController
             ->build();
     }
 
-    public function updateComment(Request $request, Response $response, array $args) {
+    public function updateDetails(Request $request, Response $response, array $args) {
         $body = $request->getParsedBody();
         $id = $body['id'] ?? null;
-        $comment = $body['comment'] ?? null;
+        $details = $body['details'] ?? null;
 
-        if(!($id && $comment)) {
+        if(!($id && $details)) {
             return DefaultJsonResponse::create($response)
                 ->withMessage("wrong parameters, supply id and message as json")
                 ->isSuccessfull(false)
                 ->build();
         }
 
-        $success = $this->empresaService->updateComment($id, $comment);
+        $success = $this->empresaService->updateComment($id, $details);
 
         if($success) {
             return DefaultJsonResponse::create($response)
