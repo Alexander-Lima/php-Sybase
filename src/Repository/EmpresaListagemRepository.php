@@ -15,7 +15,8 @@ class EmpresaListagemRepository implements EmpresaListagemRepositoryInterface
                 empresas.codi_emp AS 'ID',     
                 ' ' + empresas.cgce_emp AS CNPJ,
                 empresas.razao_emp AS 'RAZÃO SOCIAL',
-                empresas.esta_emp AS 'UF', 
+                empresas.esta_emp AS 'UF',
+                empresas.foro_EMP AS COMENTARIO,
             (CASE 
                 WHEN empresas.iest_emp IS NULL THEN '-'  
                 ELSE ' ' + empresas.iest_emp
