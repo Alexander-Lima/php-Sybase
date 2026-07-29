@@ -78,8 +78,10 @@ class Database
         sasql_stmt_execute($preparedStatement);
 
         $success = sasql_stmt_affected_rows($preparedStatement) > 0;
+
         $this->closeConnection();
-        return  $success;
+        
+        return $success;
     }
 
     private function prepareStatement(string $query, array $bindParams)

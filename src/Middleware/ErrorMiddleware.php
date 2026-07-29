@@ -19,8 +19,10 @@ class ErrorMiddleware implements ErrorHandlerInterface
         bool $logErrors,
         bool $logErrorDetails): ResponseInterface
     {
+        error_log("{$exception->getFile()} -> {$exception->getMessage()}");
         $response = $this->responseFactory->createResponse();
         $response->getBody()->write(json_encode(['error' => $exception->getMessage()]));
+        
         return $response->withHeader('Content-Type', 'application/json')->withStatus(500);
     }
 }
