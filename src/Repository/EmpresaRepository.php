@@ -25,12 +25,13 @@ class EmpresaRepository implements EmpresaRepositoryInterface
 
     public function updateComment(string $id, string $details): bool
     {
+        $warning = "***NÃO MODIFIQUE ESTA ABA! EM CASO DE DÚVIDAS, FALE COM O ALEX.***\r\n\r\n";
         $query = "UPDATE bethadba.geempre SET OBS_FISCAL = ? WHERE codi_emp = ?";
 
         return $this->database->updateOrInsertPrepared(
             $query,
             [
-                ["type"=> "s", "value" => $details],
+                ["type"=> "s", "value" => "{$warning}{$details}"],
                 ["type"=> "i", "value" => $id]
             ]
         );
